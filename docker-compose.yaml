@@ -1,0 +1,33 @@
+
+version: "3"
+
+services:
+  shiny-server:
+    image: rocker/shiny
+    ports:
+      - 3839:3838
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - "$PWD/apps/:/srv/shiny-server/"
+      - "$PWD/shinylog/:/var/log/shiny-server/"
+      - "mysharedvol:/tmp/mysharedvol"
+
+  db:
+    image: postgres
+    restart: always
+    # this allows DBeaver to connect
+    ports:
+      - 6717:5432
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mysharedvol:
+
